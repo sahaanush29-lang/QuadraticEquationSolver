@@ -1,0 +1,91 @@
+<html>
+  <body>
+    <h1 style = "color: blue; background-color: pink; font-family: Comic Sans MS; font-size: 36px">This is a Quadratic equation solver</h1>
+    <br>
+    <h2 style = "background-color: lightgreen; font-family: Comic Sans MS; font-size: 20px"> Instructions: Add the values of a, b, c and the qudratic equation solver will solve the equation for you!</h2>
+    <h2 style = "background-color: lightgreen; font-family: Comic Sans MS; font-size: 20px">It can only solve for equations which have real roots and it is rounded to 2 decimal places</h2>
+    <p>a = </p><input id= "a" type = "text" style = "background-color: mistyrose; width: 50px; height: 23px">
+    <p>b = </p><input id= "b" type = "text" style = "background-color: mistyrose; width: 50px; height: 23px">
+    <p>c = </p><input id= "c" type = "text" style = "background-color: mistyrose; width: 50px; height: 23px">
+    <br>
+    <br>
+    <button id ="solve-button" style="background-color: turquoise; color: white; padding: 5px 5px; border-radius: 5px; cursor: pointer;">Solve</button>
+    <br>
+    <br>
+    <div id="outputArea" style = "display: none" >
+      <output id ="output"></output>
+      <br>
+      <br>
+      <output id= "output2"></output>
+      <br>
+      <br>
+      <output id = "output3"></output>
+      <br>
+      <br>
+      <button id= "restart-button" style="background-color: red; color: white; padding: 5px 5px; border-radius: 5px; cursor: pointer;">Restart</button>
+    </div>
+    <script>
+document.getElementById("solve-button").onclick = () => {
+    let a = document.getElementById("a").value;
+    let b = document.getElementById("b").value;
+    let c = document.getElementById("c").value;
+
+    // 1. Fixed the validation function logic
+    function validateInputs(valA, valB, valC) {
+        const isValid = (str) => {
+            const value = str.trim();
+            if (!value) return false;
+            const validPattern = /^-?(\d+(\.\d+)?|\d+\/\d+)$/;
+            return validPattern.test(value);
+        };
+        // Returns true only if all three are valid
+        return isValid(valA) && isValid(valB) && isValid(valC);
+    }
+
+    let result = validateInputs(a, b, c);
+
+    // 2. Handle the display area
+    document.getElementById("outputArea").style.display = "block";
+    
+    // Reset outputs in case of previous errors
+    document.getElementById("output").textContent = "";
+    document.getElementById("output2").textContent = "";
+    document.getElementById("output3").textContent = "";
+
+    if (result === false) {
+        document.getElementById("output2").textContent = "Your Quadratic equation contains letters. Try again.";
+        return; // Stop execution
+    }
+
+    // Convert strings to numbers for calculation
+    a = parseFloat(a);
+    b = parseFloat(b);
+    c = parseFloat(c);
+
+    if (a === 0) {
+        document.getElementById("output2").textContent = "If 'a' is 0, it's not a quadratic equation!";
+        return;
+    }
+
+    // 3. Calculation Logic
+    let discriminant = (b ** 2) - (4 * a * c);
+
+    if (discriminant < 0) {
+        document.getElementById("output").textContent = `(${a}x²) + (${b}x) + (${c}) = 0`;
+        document.getElementById("output2").textContent = "No real roots.";
+        document.getElementById("output3").textContent = `Discriminant (b² - 4ac) = ${discriminant.toFixed(2)}, which is less than zero.`;
+    } else {
+        let x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+        let x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+        
+        document.getElementById("output").textContent = `(${a}x²) + (${b}x) + (${c}) = 0`;
+        document.getElementById("output2").textContent = "The roots are: " + x1.toFixed(10) + " and " + x2.toFixed(10);
+    }
+};
+
+document.getElementById("restart-button").onclick = () => {
+    location.reload();
+};
+    </script>
+  </body>
+</html>
